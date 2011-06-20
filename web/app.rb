@@ -10,10 +10,8 @@ require 'mongo'
 configure do
 	use Rack::Session::Cookie, :secret => Digest::SHA1.hexdigest(rand.to_s)
 	set :config, YAML.load_file("config.yaml")
-  set :dbname, "matsudo_matsuri_201106"
-  set :pager_num, 20
+  set :mongo, Mongo::Connection.new('localhost', 27017, :pool_size => 20,:timeout => 100)
 end
-
 
 # root
 get '/' do
@@ -30,18 +28,24 @@ end
 
 
 # return newest mikoshi statuses as JSON
-get '/mikoshi/api.json' do
-  coll = Mongo::Connection.new.db(options.dbname).collection("mikoshi")
-  results = coll.find({},{:sort=>['id', 'descending'], :limit=>options.pager_num})
-  json = JSON.dump(results)
-  return json
+get '/:name/api.json' do
+  mikoshi = settings.mongo.db('test').collection(params[:name])
+  results = mikoshi.find({},{:sort=>['time', 'descending'], :limit=>settings.config['pager_num']})
+  resp = []
+  results.each do |row|
+    row.delete('_id')
+    resp.push(row)
+  end
+  return JSON.dump(resp)
 end
 # save one of mikoshi status to mongodb
-post '/mikoshi/api.json' do
+post '/:name/api.json' do
   hash = JSON.parse(request.body.string)
-  if hash['pass'] == options.config['pass']
-    coll = Mongo::Connection.new.db(options.dbname).collection("mikoshi")
-    coll.insert(hash)
+  if hash['pass'] == settings.config['pass']
+    hash.delete('pass')
+    hash['updated_at'] = Time.now.to_i.to_s
+    mikoshi = settings.mongo.db('test').collection(params[:name])
+    mikoshi.insert(hash)
     return "{'result': 'succeed'}"
   else
     halt 401, "{'result': 'failed', 'reason':'invalid pass'}"
