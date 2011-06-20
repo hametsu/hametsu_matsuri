@@ -22,7 +22,6 @@ class HeyKoike
 		response = @agent.submit(form)
 		form = response.forms.first
 		response = @agent.submit(form)
-		puts response.body
 	end
 	
 end
@@ -30,7 +29,10 @@ end
 
 if __FILE__ == $0 then
 	hk = HeyKoike.new
-	hk.say('はい')
+	while(sleep 120) do
+		ch = %w(お い 、 小 池).shuffle.first
+		hk.say(ch)
+	end
 end
 
 
