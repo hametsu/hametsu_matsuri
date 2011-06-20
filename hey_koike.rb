@@ -9,7 +9,7 @@ require 'uri'
 
 
 class HeyKoike
-	URI = URI.parse(%q!http://kamome.2ch.net/test/read.cgi/art/1308485019/!)
+	URI = URI.parse(%q!http://kamome.2ch.net/test/read.cgi/art/1308547784/!)
 	def initialize
 		@agent = Mechanize.new
 	end
