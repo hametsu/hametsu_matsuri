@@ -20,8 +20,9 @@ class HeyKoike
 		form['mail'] = 'sage'
 		form['MESSAGE'] = message
 		response = @agent.submit(form)
-		form = response.forms.first['submit'] = 'hoge'
+		form = response.forms.first
 		response = @agent.submit(form)
+		puts response.body
 	end
 	
 end
