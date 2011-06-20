@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# -*- coding: utf-8 -*-
+# -*- coding: japanese-cp932 -*-
 # author: takano32 <tak at no32.tk>
 #
 
