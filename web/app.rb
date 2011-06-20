@@ -36,6 +36,7 @@ get '/:name/api.json' do
     row.delete('_id')
     resp.push(row)
   end
+  headers 'Content-Type' => 'application/json', 'Access-Control-Allow-Origin' => '*'
   return JSON.dump(resp)
 end
 # save one of mikoshi status to mongodb
