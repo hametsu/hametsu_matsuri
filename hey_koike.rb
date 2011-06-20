@@ -31,11 +31,10 @@ end
 
 if __FILE__ == $0 then
 	hk = HeyKoike.new
-	while(sleep 1) do
+	while(sleep 120) do
 		ch = %w(Ç® Ç¢ ÅA è¨ ír ÅI).shuffle.first
 		hk.say(ch)
 		puts ch
-		exit
 	end
 end
 
