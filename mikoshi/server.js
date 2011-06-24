@@ -6,10 +6,10 @@ var io = require('socket.io');
 
 server = http.createServer(function(req, res){
     res.writeHead(200, {'Content-Type': 'text/html'});
-    res.write('<h1>sample server</h1>');
+    res.write('<h1>nodejs server</h1>');
     res.end();
 });
-server.listen(8080);
+server.listen(4545);
 
 var socket = io.listen(server);
 socket.on('connection', function(client){
