@@ -10,7 +10,7 @@ require 'mongo'
 configure do
 	use Rack::Session::Cookie, :secret => Digest::SHA1.hexdigest(rand.to_s)
 	set :config, YAML.load_file("config.yaml")
-  set :mongo, Mongo::Connection.new('localhost', 27017, :pool_size => 20,:timeout => 100)
+  #set :mongo, Mongo::Connection.new('localhost', 27017, :pool_size => 20,:timeout => 100)
 end
 
 # root
