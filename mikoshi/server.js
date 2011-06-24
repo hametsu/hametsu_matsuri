@@ -9,7 +9,7 @@ server = http.createServer(function(req, res){
     res.write('<h1>sample server</h1>');
     res.end();
 });
-server.listen(8080);
+server.listen(4545);
 
 var socket = io.listen(server);
 socket.on('connection', function(client){

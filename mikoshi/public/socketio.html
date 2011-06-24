@@ -7,8 +7,9 @@
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.min.js"></script>
 <script type="text/javascript">
 $(function() {
-    var socket = new io.Socket('localhost', {port: 8080});
+    var socket = new io.Socket('yuiseki.net', {port: 4545});
     socket.connect();
+    console.log(socket)
 
     $('#awesome').click(function(event){
         var message = JSON.stringify({status:'awesome', action:'status'});
