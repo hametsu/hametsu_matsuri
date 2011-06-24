@@ -1,3 +1,6 @@
+// リアルタイム通信のためのサーバー
+// メッセージを全クライアントにブロードキャストする
+//
 var http = require('http');
 var io = require('socket.io');
 
