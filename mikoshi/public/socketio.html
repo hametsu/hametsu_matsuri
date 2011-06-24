@@ -16,7 +16,7 @@ $(function() {
         return false;
     });
 
-    $('#lame').click(function() {
+    $('#lame').click(function(event) {
         var message = JSON.stringify({status:'lame', action:'status'});
         socket.send(message);
         return false;
@@ -24,15 +24,17 @@ $(function() {
 
     socket.on('message', function(msg) {
         var obj =  JSON.parse(msg);
+        console.log(obj);
         switch(obj.action){
         case 'status':
-            console.log(obj);
             if (obj.status=='awesome'){
-                $('mikoshi').removeClass('lame')
-                $('mikoshi').addClass('awesome');
+                console.log('set awesome')
+                $('#mikoshi').removeClass('lame')
+                $('#mikoshi').addClass('awesome');
             }else if (obj.status=='lame'){
-                $('mikoshi').removeClass('awesome')
-                $('mikoshi').addClass('lame');
+                console.log('set lame')
+                $('#mikoshi').removeClass('awesome')
+                $('#mikoshi').addClass('lame');
             }
             break;
 
@@ -46,32 +48,24 @@ $(function() {
 </script>
 <style TYPE="text/css">
   .button{
-    width:200px;
-    height:150px;
-    background: -moz-linear-gradient(top, #fc0, #f90);
-    background:-webkit-gradient(linear, center top, center bottom, from(#fc0), to(#f90));
-  }
-  .awesome{
-    color:red;
-  }
-  .lame{
-    color:blue;
-  }
-</script>
-<style TYPE="text/css">
-  .button{
     float:left;
-    margin:10px;
-    padding:10px;
-    width:200px;
-    height:100px;
+    font-size:1.5em;
+    text-align:center;
+    margin:10px; padding:5px;
+    width:150px; height:50px;
     background: -moz-linear-gradient(top, #fc0, #f90);
     background:-webkit-gradient(linear, center top, center bottom, from(#fc0), to(#f90));
   }
+  #mikoshi{
+    width:150px; height:50px;
+    border:1px solid black;
+  }
   .awesome{
+    background-color:blue;
     color:red;
   }
   .lame{
+    background-color:red;
     color:blue;
   }
 </style>
