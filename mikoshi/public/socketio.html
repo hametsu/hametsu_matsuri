@@ -1,7 +1,7 @@
-<!DOCTYPE html>
-<html lang="ja">
-<meta charset="utf-8">
-<head>
+<!DOCTYPE html> 
+<html lang='ja' xml:lang='ja' xmlns='http://www.w3.org/1999/xhtml'> 
+<head> 
+<meta content='text/html; charset=utf-8' http-equiv='content-type'> 
 <script type="text/javascript" src="http://cdn.socket.io/stable/socket.io.js"></script>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.min.js"></script>
@@ -9,17 +9,23 @@
 $(function() {
     var socket = new io.Socket('yuiseki.net', {port: 4545});
     socket.connect();
-    console.log(socket)
+    console.log(socket);
+    function getUserid(){
+        return $('#user-id').value();
+    };
+    function sendsocket(hash){
+        hash['userid'] = getUserid();
+        var message = JSON.stringify(hash);
+        socket.send(message);
+    };
 
     $('#awesome').click(function(event){
-        var message = JSON.stringify({status:'awesome', action:'status'});
-        socket.send(message);
+        sendsocket({status:'awesome', action:'status'});
         return false;
     });
 
     $('#lame').click(function(event) {
-        var message = JSON.stringify({status:'lame', action:'status'});
-        socket.send(message);
+        sendsocket({status:'lame', action:'status'});
         return false;
     });
 
@@ -37,10 +43,6 @@ $(function() {
                 $('#mikoshi').removeClass('awesome')
                 $('#mikoshi').addClass('lame');
             }
-            break;
-
-        case 'log':
-            console.log(obj)
             break;
         }
     });
@@ -71,9 +73,14 @@ $(function() {
   }
 </style>
 </head>
+
 <body>
 
-  <div id="mikoshi" class="">aaaaaaaaaaaaaaaa</div>
+  <input type="text" id="user-id" />
+  <div id="mikoshi" class="">mikoshi</div>
+
+  <div id="user-wrap">
+  </div>
 
   <div id="awesome" class="button">awesome</div>
   <div id="lame" class="button">lame</div>
