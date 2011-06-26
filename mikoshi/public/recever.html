@@ -1,0 +1,90 @@
+<!DOCTYPE html> 
+<html lang='ja' xml:lang='ja' xmlns='http://www.w3.org/1999/xhtml'> 
+<head> 
+<meta content='text/html; charset=utf-8' http-equiv='content-type'> 
+<script type="text/javascript" src="http://cdn.socket.io/stable/socket.io.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.min.js"></script>
+<script type="text/javascript">
+function getParameter(key) {
+  var str = location.search.split("?");
+  if (str.length < 2) {
+    return "";
+  }
+  var params = str[1].split("&");
+  for (var i = 0; i < params.length; i++) {
+    var keyVal = params[i].split("=");
+    if (keyVal[0] == key && keyVal.length == 2) {
+      return decodeURIComponent(keyVal[1]);
+    }
+  }
+  return "";
+};
+function changeChannel(channel_id){
+  var basename = window.location.pathname;
+  var newurl = basename+'?channel_id='+channel_id;
+  window.location.href = newurl;
+  /*$('.ustream').each(function(){
+      $(this).hide();
+    });
+
+  target_channel = $('#'+channel_id);
+  if(target_channel.length>0){
+    console.log('show channel');
+    target_channel.show();
+    //window.location.hash(channel_id);
+  }else{
+    window.location.hash(channel_id);
+  }
+  */
+};
+function watchSocket(socket){
+  if(!socket.connected){
+    console.log('socket unconnected');
+    socket.connect();
+    //window.location.reload(true);
+  }
+};
+$(function() {
+
+    var channel_id = getParameter('channel_id');
+    if(channel_id!=""){
+        console.log('create channel');
+        ustviewer = '<object width="98%" height="98%">'
+                  + '<embed flashvars="autoplay=true&amp;brand=embed&amp;cid='+channel_id+'&amp;locale=ja_JP&amp;v3=1"'
+                  + 'width="98%" height="98%" allowfullscreen="true" allowscriptaccess="always"'
+                  + 'src="http://www.ustream.tv/flash/viewer.swf" type="application/x-shockwave-flash" />'
+                  + '</object>';
+        $('#screen').append('<div id="'+channel_id+'" class="ustream">'+ustviewer+'</div>');
+    }
+
+    var socket = new io.Socket('yuiseki.net', {port: 4545});
+    socket.connect();
+    console.log(socket);
+    watchSocket(socket);
+    socket.on('message', function(msg) {
+        var obj =  JSON.parse(msg);
+        console.log(obj);
+        switch(obj.action){
+        case 'channel':
+            if (obj.channel){
+                changeChannel(obj.channel)
+            }
+            break;
+        }
+    });
+
+
+});
+</script>
+<style TYPE="text/css">
+</style>
+</head>
+
+<body>
+
+  <div id="screen">
+  </div>
+
+</body>
+</html>
